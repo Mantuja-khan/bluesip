@@ -1,0 +1,399 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Responsive font sizes */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 1025px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Custom animations */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Gradient text animation */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-sip-600 hover:bg-blue-sip-700 text-white font-medium py-2 px-4 sm:px-6 rounded-lg transition-colors duration-200 text-sm sm:text-base;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 sm:px-6 rounded-lg transition-colors duration-200 text-sm sm:text-base;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm sm:text-base;
+  }
+  
+  .input-field {
+    @apply w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-sip-500 focus:border-transparent outline-none transition-all duration-200 text-sm sm:text-base;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300;
+  }
+
+  /* Mobile-first responsive text utilities */
+  .text-responsive-xs {
+    @apply text-xs sm:text-sm md:text-base;
+  }
+  
+  .text-responsive-sm {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+  
+  .text-responsive-base {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  /* Mobile spacing utilities */
+  .spacing-responsive {
+    @apply p-3 sm:p-4 md:p-6 lg:p-8;
+  }
+  
+  .spacing-responsive-sm {
+    @apply p-2 sm:p-3 md:p-4;
+  }
+  
+  .spacing-responsive-lg {
+    @apply p-4 sm:p-6 md:p-8 lg:p-12;
+  }
+
+  /* Mobile margin utilities */
+  .margin-responsive {
+    @apply m-3 sm:m-4 md:m-6 lg:m-8;
+  }
+  
+  .margin-responsive-y {
+    @apply my-3 sm:my-4 md:my-6 lg:my-8;
+  }
+  
+  .margin-responsive-x {
+    @apply mx-3 sm:mx-4 md:mx-6 lg:mx-8;
+  }
+
+  /* Line clamp utilities for text truncation */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Mobile-optimized grid utilities */
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+  
+  .grid-responsive-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2;
+  }
+  
+  .grid-responsive-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+  
+  .grid-responsive-4 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  /* Mobile-first gap utilities */
+  .gap-responsive {
+    @apply gap-3 sm:gap-4 md:gap-6 lg:gap-8;
+  }
+  
+  .gap-responsive-sm {
+    @apply gap-2 sm:gap-3 md:gap-4;
+  }
+  
+  .gap-responsive-lg {
+    @apply gap-4 sm:gap-6 md:gap-8 lg:gap-12;
+  }
+
+  /* Mobile navigation improvements */
+  .mobile-nav-item {
+    @apply block px-3 py-2 text-sm sm:text-base text-gray-700 hover:text-blue-sip-600 hover:bg-white rounded-md transition-colors font-medium;
+  }
+
+  /* Mobile card improvements */
+  .mobile-card {
+    @apply bg-white rounded-lg shadow-sm p-3 sm:p-4 md:p-6 border border-gray-100 hover:shadow-md transition-all duration-300;
+  }
+
+  /* Mobile button improvements */
+  .mobile-btn {
+    @apply w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium rounded-lg transition-all duration-300;
+  }
+
+  /* Mobile image responsive */
+  .img-responsive {
+    @apply w-full h-32 sm:h-40 md:h-48 lg:h-56 object-cover;
+  }
+  
+  .img-responsive-sm {
+    @apply w-full h-24 sm:h-32 md:h-40 object-cover;
+  }
+  
+  .img-responsive-lg {
+    @apply w-full h-40 sm:h-56 md:h-64 lg:h-80 object-cover;
+  }
+
+  /* Mobile container improvements */
+  .container-responsive {
+    @apply max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8;
+  }
+
+  /* Mobile section spacing */
+  .section-spacing {
+    @apply py-8 sm:py-12 md:py-16 lg:py-20;
+  }
+  
+  .section-spacing-sm {
+    @apply py-6 sm:py-8 md:py-12;
+  }
+  
+  .section-spacing-lg {
+    @apply py-12 sm:py-16 md:py-20 lg:py-24;
+  }
+
+  /* Bottom navigation specific styles */
+  .bottom-nav-visible {
+    transform: translateY(0);
+  }
+  
+  .bottom-nav-hidden {
+    transform: translateY(100%);
+  }
+
+  /* Remove gap between navbar and content on mobile */
+  .navbar-gap-fix {
+    @apply mt-0 pt-0;
+  }
+}
+
+/* Custom scrollbar for mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+}
+
+/* Touch-friendly improvements for mobile */
+@media (max-width: 768px) {
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-danger {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+  
+  .input-field {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+}
+
+/* Prevent zoom on input focus for iOS */
+@media screen and (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Mobile-specific animations */
+@media (max-width: 768px) {
+  .hover\:scale-105:hover {
+    transform: scale(1.02);
+  }
+  
+  .hover\:-translate-y-2:hover {
+    transform: translateY(-4px);
+  }
+}
+
+/* Improved mobile focus states */
+@media (max-width: 768px) {
+  button:focus,
+  a:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Bottom navigation transition improvements */
+@media (max-width: 1024px) {
+  .bottom-nav-transition {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Ensure proper spacing for pages with bottom navigation */
+@media (max-width: 1024px) {
+  .page-content {
+    padding-bottom: 80px; /* Extra padding for bottom nav */
+  }
+}
+
+/* Hide scrollbar during bottom nav transitions */
+@media (max-width: 1024px) {
+  body.nav-transitioning {
+    overflow-x: hidden;
+  }
+}

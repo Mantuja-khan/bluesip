@@ -1,0 +1,66 @@
+.sticker-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sticker-content {
+  width: 95%;
+  height: 95%;
+  background: #f5f7fa;
+  border-radius: 12px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.editor-layout {
+  display: flex;
+  height: 100%;
+}
+
+.controls-panel {
+  width: 260px;
+  background: #fff;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.controls-panel button {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.canvas-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvas-editor-area {
+  flex: 1;
+  background: #e5e7eb; /* light gray */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+  padding: 30px;
+}
+
+.canvas-editor-area canvas {
+  border: 2px dashed #cbd5e1;
+  background: white;
+}
