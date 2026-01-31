@@ -12,7 +12,7 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api'
+const API_URL = 'https://api.bluesip.org.in/api'
 
 const Dashboard = () => {
   const [stats, setStats] = useState({

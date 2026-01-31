@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import bluesip from "../assets/bluesip.png"
 
-const API_URL = 'http://localhost:5000/api'
+const API_URL = 'https://api.bluesip.org.in/api'
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([])

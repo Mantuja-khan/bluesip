@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Globe, Headphones, Awa
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api'
+const API_URL = 'https://api.bluesip.org.in/api'
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({

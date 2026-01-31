@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const AuthContext = createContext()
 
-const API_URL = 'http://localhost:5000/api'
+const API_URL = 'https://api.bluesip.org.in/api'
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
