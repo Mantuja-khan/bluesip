@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import wholesale from '../assets/wholesale.png'
 
-const API_URL = 'http://localhost:5000/api'
+const API_URL = import.meta.env.VITE_API_URL
 
 const BOTTLES_PER_BOX = 12
 const MINIMUM_BOXES = 30
