@@ -6,7 +6,7 @@ import { ShoppingCart, ArrowLeft, Star, Zap, AlertCircle, Edit2, Trash2, X } fro
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-const API_URL = 'https://api.bluesip.org.in/api'
+const API_URL = 'http://localhost:5000/api'
 
 const BOTTLES_PER_BOX = 12
 const MINIMUM_BOXES = 30

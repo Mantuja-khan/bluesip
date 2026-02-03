@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const AuthContext = createContext()
 
-const API_URL = 'https://api.bluesip.org.in/api'
+const API_URL = 'http://localhost:5000/api'
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
       setLoading(false)
     }
   }, [])
-
   const fetchUser = async () => {
     try {
       const response = await axios.get(`${API_URL}/auth/profile`)

@@ -15,6 +15,8 @@ const Navbar = () => {
   const [isBottomNavVisible, setIsBottomNavVisible] = useState(true)
   const [isTopNavVisible, setIsTopNavVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const [isChecking, setIsChecking] = useState(false)
+
   
   // Location Modal States
   const [showLocationModal, setShowLocationModal] = useState(false)
@@ -25,13 +27,49 @@ const Navbar = () => {
 
   // Available Cities and Pincodes
   const availableLocations = [
-    { city: 'Jaipur', pincodes: ['302001', '302002', '302003', '302004', '302015', '302017'] },
-    { city: 'Delhi', pincodes: ['110001', '110002', '110003', '110016', '110025'] },
-    { city: 'Mumbai', pincodes: ['400001', '400002', '400051', '400052'] },
-    { city: 'Bangalore', pincodes: ['560001', '560002', '560034', '560066'] },
-    { city: 'Hyderabad', pincodes: ['500001', '500003', '500016', '500081'] },
-    { city: 'Pune', pincodes: ['411001', '411002', '411014', '411038'] },
-  ]
+    {
+      city: 'Nuh',
+      pincodes: ['122103', '122104', '122105', '122107', '122108', '122508']
+    },
+    {
+      city: 'Gurugram',
+      pincodes: [
+        '122001', '122002', '122003', '122004',
+        '122005', '122006', '122007', '122008',
+        '122009', '122010', '122011', '122015',
+        '122016', '122017', '122018', '122051',
+        '122052', '122101', '122102'
+      ]
+    },
+    {
+      city: 'Tauru',
+      pincodes: ['122105']
+    },
+    {
+      city: 'Palwal',
+      pincodes: ['121102', '121105', '121106', '121107', '121108', '121109']
+    },
+    {
+      city: 'Delhi',
+      pincodes: [
+        '110001', '110002', '110003', '110005',
+        '110016', '110018', '110021', '110024',
+        '110033', '110043'
+      ]
+    },
+    {
+      city: 'Bhiwadi',
+      pincodes: ['301019']
+    },
+    {
+      city: 'Hyderabad',
+      pincodes: ['500001', '500003', '500016', '500081']
+    },
+    {
+      city: 'Pune',
+      pincodes: ['411001', '411002', '411014', '411038']
+    }
+  ];
 
   // Check if location modal should be shown on first visit
   useEffect(() => {
@@ -50,80 +88,81 @@ const Navbar = () => {
 
   const checkAvailability = () => {
     if (!cityName && !pincode) {
-      setAvailabilityStatus({ 
-        available: false, 
-        message: 'Please enter city name or pincode' 
+      setAvailabilityStatus({
+        available: false,
+        message: 'Please enter city or pincode'
       })
       return
     }
 
-    let isAvailable = false
-    let matchedLocation = null
+    setIsChecking(true)
+    setAvailabilityStatus(null) // Clear previous status
 
-    // Check by city name
-    if (cityName) {
-      matchedLocation = availableLocations.find(
-        loc => loc.city.toLowerCase() === cityName.toLowerCase()
-      )
-      if (matchedLocation) {
-        isAvailable = true
-      }
-    }
+    setTimeout(() => {
+      let isAvailable = false
+      let matchedLocation = null
 
-    // Check by pincode
-    if (pincode && !isAvailable) {
-      matchedLocation = availableLocations.find(
-        loc => loc.pincodes.includes(pincode)
-      )
-      if (matchedLocation) {
-        isAvailable = true
+      // City Match
+      if (cityName) {
+        matchedLocation = availableLocations.find(
+          loc => loc.city.toLowerCase() === cityName.toLowerCase()
+        )
+        if (matchedLocation) isAvailable = true
       }
-    }
 
-    if (isAvailable && matchedLocation) {
-      setAvailabilityStatus({
-        available: true,
-        message: `Great! We deliver to ${matchedLocation.city}`,
-        location: matchedLocation
-      })
-      // Save location to localStorage
-      const locationData = {
-        city: matchedLocation.city,
-        pincode: pincode || matchedLocation.pincodes[0],
-        available: true
+      // Pincode Match
+      if (pincode && !isAvailable) {
+        matchedLocation = availableLocations.find(
+          loc => loc.pincodes.includes(pincode)
+        )
+        if (matchedLocation) isAvailable = true
       }
-      localStorage.setItem('selectedLocation', JSON.stringify(locationData))
-      setSelectedLocation(locationData)
-      
-      // Close modal after 1 second
-      setTimeout(() => {
-        closeLocationModal()
-      }, 1000)
-    } else {
-      const locationData = {
-        city: cityName || 'Unknown',
-        pincode: pincode || '',
-        available: false
+
+      if (isAvailable && matchedLocation) {
+        const locationData = {
+          city: matchedLocation.city,
+          pincode: pincode || matchedLocation.pincodes[0],
+          available: true
+        }
+
+        setAvailabilityStatus({
+          available: true,
+          message: `🎉 Great! We deliver to ${locationData.city} (${locationData.pincode})`
+        })
+
+        // Update location in state and localStorage
+        localStorage.setItem('selectedLocation', JSON.stringify(locationData))
+        setSelectedLocation(locationData)
+
+        // Auto close modal after 2 seconds
+        setTimeout(() => {
+          closeLocationModal()
+        }, 2000)
+
+      } else {
+        setAvailabilityStatus({
+          available: false,
+          message: '❌ Sorry! We don\'t deliver to this area yet.'
+        })
+
+        // Auto close modal after 3 seconds for unavailable locations
+        setTimeout(() => {
+          closeLocationModal()
+        }, 3000)
       }
-      setAvailabilityStatus({
-        available: false,
-        message: 'Sorry, we are not available in your area yet. We are expanding soon!'
-      })
-      localStorage.setItem('selectedLocation', JSON.stringify(locationData))
-      setSelectedLocation(locationData)
-      
-      // Close modal after 2 seconds
-      setTimeout(() => {
-        closeLocationModal()
-      }, 2000)
-    }
+
+      setIsChecking(false)
+    }, 2000)
   }
 
   const closeLocationModal = () => {
     setShowLocationModal(false)
-    setCityName('')
-    setPincode('')
-    setAvailabilityStatus(null)
+    // Reset form after animation completes
+    setTimeout(() => {
+      setCityName('')
+      setPincode('')
+      setAvailabilityStatus(null)
+    }, 300)
   }
 
   const handleLogout = () => {
@@ -180,14 +219,14 @@ const Navbar = () => {
 
   // Get button color based on availability
   const getLocationButtonColor = () => {
-    if (!selectedLocation) return 'bg-gray-100 text-gray-700'
+    if (!selectedLocation) return 'bg-gray-100 text-gray-700 hover:bg-gray-200'
     return selectedLocation.available 
-      ? 'bg-green-50 text-green-700 border border-green-200' 
-      : 'bg-red-50 text-red-700 border border-red-200'
+      ? 'bg-green-50 text-green-700 border border-green-200 hover:bg-green-100' 
+      : 'bg-red-50 text-red-700 border border-red-200 hover:bg-red-100'
   }
 
   const getLocationIcon = () => {
-    if (!selectedLocation) return <MapPin className="h-4 w-4 text-blue-sip-600" />
+    if (!selectedLocation) return <MapPin className="h-4 w-4 text-gray-600" />
     return selectedLocation.available 
       ? <CheckCircle className="h-4 w-4 text-green-600" />
       : <XCircle className="h-4 w-4 text-red-600" />
@@ -197,26 +236,26 @@ const Navbar = () => {
     <>
       {/* Location Modal */}
       {showLocationModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative animate-fade-in">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative animate-slideUp">
             {/* Close Button */}
             <button
               onClick={closeLocationModal}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors hover:rotate-90 transform duration-200"
             >
               <X className="h-6 w-6" />
             </button>
 
             {/* Header */}
             <div className="text-center mb-6">
-              <div className="mx-auto w-16 h-16 bg-blue-sip-100 rounded-full flex items-center justify-center mb-4">
-                <MapPin className="h-8 w-8 text-blue-sip-600" />
+              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg animate-bounce-slow">
+                <MapPin className="h-8 w-8 text-white" />
               </div>
-              <h2 className="text-2xl font-  text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Check Delivery
               </h2>
               <p className="text-gray-600 text-sm">
-                Enter your city or pincode
+                Enter your city or pincode to check availability
               </p>
             </div>
 
@@ -227,21 +266,27 @@ const Navbar = () => {
                   type="text"
                   value={cityName}
                   onChange={(e) => setCityName(e.target.value)}
-                  placeholder="City Name (e.g., Jaipur)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-sip-500 focus:border-transparent outline-none transition-all"
+                  placeholder="City Name (e.g., Gurugram)"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all hover:border-gray-300"
+                  disabled={isChecking}
                 />
               </div>
 
-              <div className="text-center text-gray-500 text-sm font-semi ">OR</div>
+              <div className="flex items-center space-x-2">
+                <div className="flex-1 h-px bg-gray-300"></div>
+                <span className="text-gray-500 text-sm font-medium">OR</span>
+                <div className="flex-1 h-px bg-gray-300"></div>
+              </div>
 
               <div>
                 <input
                   type="text"
                   value={pincode}
                   onChange={(e) => setPincode(e.target.value)}
-                  placeholder="Pincode (e.g., 302001)"
+                  placeholder="Pincode (e.g., 122001)"
                   maxLength="6"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-sip-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all hover:border-gray-300"
+                  disabled={isChecking}
                 />
               </div>
             </div>
@@ -249,29 +294,39 @@ const Navbar = () => {
             {/* Check Button */}
             <button
               onClick={checkAvailability}
-              className="w-full bg-blue-sip-600 text-white py-3 rounded-lg font-  hover:bg-blue-sip-700 transition-colors mb-4"
+              disabled={isChecking}
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg   hover:from-blue-600 hover:to-blue-700 transition-all mb-4 flex justify-center items-center shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
             >
-              Check Availability
+              {isChecking ? (
+                <>
+                  <div className="relative h-5 w-5 mr-3">
+                    <div className="absolute top-0 left-0 h-5 w-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute top-0 left-0 h-5 w-5 border-2 border-white/30 rounded-full"></div>
+                  </div>
+                  Checking Availability...
+                </>
+              ) : (
+                <>
+                  <MapPin className="h-5 w-5 mr-2" />
+                  Check Availability
+                </>
+              )}
             </button>
 
             {/* Availability Status */}
             {availabilityStatus && (
-              <div className={`p-4 rounded-lg flex items-start space-x-3 ${
+              <div className={`p-4 rounded-lg text-center   animate-slideDown ${
                 availabilityStatus.available 
-                  ? 'bg-green-50 border border-green-200' 
-                  : 'bg-red-50 border border-red-200'
+                  ? 'bg-gradient-to-r from-green-50 to-green-100 text-green-800 border-2 border-green-300 shadow-sm' 
+                  : 'bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-2 border-red-300 shadow-sm'
               }`}>
-                {availabilityStatus.available ? (
-                  <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
-                ) : (
-                  <XCircle className="h-6 w-6 text-red-600 flex-shrink-0 mt-0.5" />
-                )}
-                <div className="flex-1">
-                  <p className={`font-semi  text-sm ${
-                    availabilityStatus.available ? 'text-green-800' : 'text-red-800'
-                  }`}>
-                    {availabilityStatus.message}
-                  </p>
+                <div className="flex items-center justify-center space-x-2">
+                  {availabilityStatus.available ? (
+                    <CheckCircle className="h-5 w-5 animate-bounce-once" />
+                  ) : (
+                    <XCircle className="h-5 w-5 animate-shake" />
+                  )}
+                  <span>{availabilityStatus.message}</span>
                 </div>
               </div>
             )}
@@ -302,7 +357,7 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               <Link 
                 to="/" 
-                className={`text-sm xl:text-base transition-colors font-semi  ${
+                className={`text-sm xl:text-base transition-colors   ${
                   isActive('/') 
                     ? 'text-green-600 border-b-2 border-green-600 pb-1' 
                     : 'text-black hover:text-green-600'
@@ -312,17 +367,17 @@ const Navbar = () => {
               </Link>
               <Link 
                 to="/products" 
-                className={`text-sm xl:text-base transition-colors font-semi  ${
+                className={`text-sm xl:text-base transition-colors  ${
                   isActive('/products') 
                     ? 'text-green-600 border-b-2 border-green-600 pb-1' 
                     : 'text-black hover:text-green-600'
                 }`}
               >
-              Products
+                Products
               </Link>
               <Link 
                 to="/about" 
-                className={`text-sm xl:text-base transition-colors font-semi  ${
+                className={`text-sm xl:text-base transition-colors   ${
                   isActive('/about') 
                     ? 'text-green-600 border-b-2 border-green-600 pb-1' 
                     : 'text-black hover:text-green-600'
@@ -332,7 +387,7 @@ const Navbar = () => {
               </Link>
               <Link 
                 to="/contact" 
-                className={`text-sm xl:text-base transition-colors font-semi  ${
+                className={`text-sm xl:text-base transition-colors   ${
                   isActive('/contact') 
                     ? 'text-green-600 border-b-2 border-green-600 pb-1' 
                     : 'text-black hover:text-green-600'
@@ -341,14 +396,14 @@ const Navbar = () => {
                 Contact
               </Link>
               <Link 
-                to="/destributors" 
-                className={`text-sm xl:text-base transition-colors font-semi  ${
-                  isActive('/destributors') 
+                to="/customize" 
+                className={`text-sm xl:text-base transition-colors   ${
+                  isActive('/customize')
                     ? 'text-green-600 border-b-2 border-green-600 pb-1' 
                     : 'text-black hover:text-green-600'
                 }`}
               >
-                Distributors
+                Customize Sticker
               </Link>
             </div>
 
@@ -357,10 +412,10 @@ const Navbar = () => {
               {/* Location Button - Desktop & Tablet */}
               <button
                 onClick={() => setShowLocationModal(true)}
-                className={`hidden sm:flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${getLocationButtonColor()}`}
+                className={`hidden sm:flex items-center space-x-2 px-3 py-2 rounded-lg transition-all transform hover:scale-105 active:scale-95 ${getLocationButtonColor()}`}
               >
                 {getLocationIcon()}
-                <span className="text-xs font- ">
+                <span className="text-xs  ">
                   {selectedLocation ? selectedLocation.city : 'Select Location'}
                 </span>
               </button>
@@ -368,18 +423,21 @@ const Navbar = () => {
               {/* Location Button - Mobile Only */}
               <button
                 onClick={() => setShowLocationModal(true)}
-                className={`sm:hidden p-2 rounded-lg transition-all ${getLocationButtonColor()}`}
+                className={`sm:hidden flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg transition-all transform hover:scale-105 active:scale-95 ${getLocationButtonColor()}`}
               >
                 {getLocationIcon()}
+                <span className="text-xs  ">
+                  {selectedLocation ? selectedLocation.city : 'Location'}
+                </span>
               </button>
 
               {/* Cart */}
-              <Link to="/cart" className="relative p-2 text-black hover:text-gray-700 transition-colors" onClick={closeMenus}>
+              <Link to="/cart" className="relative p-4 text-black hover:text-gray-700 transition-colors" onClick={closeMenus}>
                 <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
                 {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font- ">
-                    {cartItemsCount > 99 ? '99+' : cartItemsCount}
-                  </span>
+               <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] sm:text-xs font-bold rounded-full min-w-[18px] h-[18px] sm:min-w-[20px] sm:h-[20px] flex items-center justify-center px-1 shadow-md animate-pulse translate-y-[1px]">
+  {cartItemsCount > 99 ? '99+' : cartItemsCount}
+</span>
                 )}
               </Link>
 
@@ -392,17 +450,17 @@ const Navbar = () => {
                       className="flex items-center space-x-2 text-black hover:text-gray-700 transition-colors p-2 rounded-lg hover:bg-gray-100"
                     >
                       <User className="h-5 w-5 xl:h-6 xl:w-6" />
-                      <span className="hidden xl:block text-sm font- ">{user.name}</span>
+                      <span className="hidden xl:block text-sm  ">{user.name}</span>
                     </button>
                     {isUserMenuOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
                         <div className="px-4 py-2 border-b border-gray-200">
-                          <p className="text-sm font-  text-gray-900">{user.name}</p>
-                          <p className="text-xs text-gray-500 font-semi ">{user.email}</p>
+                          <p className="text-sm   text-gray-900">{user.name}</p>
+                          <p className="text-xs text-gray-500 font-medium">{user.email}</p>
                         </div>
                         <Link
                           to="/profile"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 font-semi "
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 font-medium"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <UserCircle className="h-4 w-4" />
@@ -410,7 +468,7 @@ const Navbar = () => {
                         </Link>
                         <Link
                           to="/orders"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 font-semi "
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 font-medium"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <Package className="h-4 w-4" />
@@ -418,7 +476,7 @@ const Navbar = () => {
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2 "
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>Logout</span>
@@ -428,10 +486,10 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <div className="flex items-center space-x-2 xl:space-x-3">
-                    <Link to="/login" className="text-sm xl:text-base text-black hover:text-gray-700 transition-colors ">
+                    <Link to="/login" className="text-sm xl:text-base text-black hover:text-gray-700 transition-colors  ">
                       Login
                     </Link>
-                    <Link to="/register" className="bg-blue-sip-600 hover:bg-blue-sip-700 text-white text-xs xl:text-sm px-3 xl:px-4 py-2 rounded-lg transition-colors ">
+                    <Link to="/register" className="bg-blue-600 hover:bg-blue-700 text-white text-xs xl:text-sm px-3 xl:px-4 py-2 rounded-lg transition-colors   shadow-md hover:shadow-lg transform hover:scale-105">
                       Register
                     </Link>
                   </div>
@@ -456,7 +514,7 @@ const Navbar = () => {
             }`}
           >
             <Droplets className="h-5 w-5" />
-            <span className="text-xs font- ">Home</span>
+            <span className="text-xs  ">Home</span>
           </Link>
           
           <Link
@@ -468,7 +526,7 @@ const Navbar = () => {
             }`}
           >
             <Package className="h-5 w-5" />
-            <span className="text-xs font- ">Products</span>
+            <span className="text-xs  ">Products</span>
           </Link>
 
           <Link
@@ -480,21 +538,33 @@ const Navbar = () => {
             }`}
           >
             <Info className="h-5 w-5" />
-            <span className="text-xs font- ">About</span>
+            <span className="text-xs  ">About</span>
           </Link>
 
           <Link
-            to="/destributors"
+            to="/customize"
             className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              isActive('/destributors') 
+              isActive('/customize') 
                 ? 'text-green-600' 
                 : 'text-gray-600 hover:text-green-600'
             }`}
           >
-            <Briefcase className="h-5 w-5" />
-            <span className="text-xs font- ">Distributors</span>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
+            <span className="text-xs  ">Customize</span>
           </Link>
-          
 
           {/* Menu Toggle Button */}
           <button
@@ -506,7 +576,7 @@ const Navbar = () => {
             }`}
           >
             <Menu className="h-5 w-5" />
-            <span className="text-xs font- ">Menu</span>
+            <span className="text-xs  ">Menu</span>
           </button>
         </div>
       </div>
@@ -516,7 +586,7 @@ const Navbar = () => {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-[60] lg:hidden"
+            className="fixed inset-0 bg-black bg-opacity-50 z-[60] lg:hidden animate-fadeIn"
             onClick={closeMenus}
           />
           
@@ -533,8 +603,8 @@ const Navbar = () => {
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                 <div className="flex items-center space-x-2">
-                  <Droplets className="h-6 w-6 text-blue-sip-600" />
-                  <span className="font-  text-lg text-gray-900">Menu</span>
+                  <Droplets className="h-6 w-6 text-blue-600" />
+                  <span className="font-bold text-lg text-gray-900">Menu</span>
                 </div>
                 <button
                   onClick={closeMenus}
@@ -548,16 +618,16 @@ const Navbar = () => {
               <div className="overflow-y-auto max-h-[60vh]">
                 {/* User Info */}
                 {user && (
-                  <div className="px-6 py-4 bg-gradient-to-r from-blue-sip-50 to-blue-100">
+                  <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100">
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-blue-sip-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-  text-lg">
+                      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">
                           {user.name.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div>
-                        <p className="text-base font-  text-gray-900">{user.name}</p>
-                        <p className="text-sm text-gray-600 font-semi ">{user.email}</p>
+                        <p className="text-base   text-gray-900">{user.name}</p>
+                        <p className="text-sm text-gray-600 font-medium">{user.email}</p>
                       </div>
                     </div>
                   </div>
@@ -565,10 +635,10 @@ const Navbar = () => {
 
                 {/* Menu Items */}
                 <div className="px-4 py-4 space-y-2">
-                  {/* Contact Link - Now in Menu */}
+                  {/* Contact Link */}
                   <Link
                     to="/contact"
-                    className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:text-blue-sip-600 hover:bg-blue-sip-50 rounded-xl transition-colors font- "
+                    className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors  "
                     onClick={closeMenus}
                   >
                     <MessageCircle className="h-5 w-5" />
@@ -579,7 +649,7 @@ const Navbar = () => {
                     <>
                       <Link
                         to="/profile"
-                        className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:text-blue-sip-600 hover:bg-blue-sip-50 rounded-xl transition-colors font- "
+                        className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors  "
                         onClick={closeMenus}
                       >
                         <UserCircle className="h-5 w-5" />
@@ -587,7 +657,7 @@ const Navbar = () => {
                       </Link>
                       <Link
                         to="/orders"
-                        className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:text-blue-sip-600 hover:bg-blue-sip-50 rounded-xl transition-colors font- "
+                        className="flex items-center space-x-3 px-4 py-3 text-base text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors  "
                         onClick={closeMenus}
                       >
                         <Package className="h-5 w-5" />
@@ -596,7 +666,7 @@ const Navbar = () => {
                       <div className="border-t border-gray-200 my-2"></div>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center space-x-3 px-4 py-3 text-base text-red-600 hover:bg-red-50 rounded-xl transition-colors font- "
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-base text-red-600 hover:bg-red-50 rounded-xl transition-colors  "
                       >
                         <LogOut className="h-5 w-5" />
                         <span>Logout</span>
@@ -606,7 +676,7 @@ const Navbar = () => {
                     <div className="space-y-2 pt-2">
                       <Link
                         to="/login"
-                        className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-blue-sip-600 hover:bg-blue-sip-50 border-2 border-blue-sip-200 rounded-xl transition-colors font- "
+                        className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-blue-600 hover:bg-blue-50 border-2 border-blue-200 rounded-xl transition-colors  "
                         onClick={closeMenus}
                       >
                         <User className="h-5 w-5" />
@@ -614,7 +684,7 @@ const Navbar = () => {
                       </Link>
                       <Link
                         to="/register"
-                        className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-sip-600 text-white hover:bg-blue-sip-700 rounded-xl transition-colors font- "
+                        className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition-colors  "
                         onClick={closeMenus}
                       >
                         <UserCircle className="h-5 w-5" />
@@ -628,7 +698,96 @@ const Navbar = () => {
           </div>
         </>
       )}
+
+      {/* Custom CSS for Animations */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes slideDown {
+          from {
+            transform: translateY(-10px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes bounceSlow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+
+        @keyframes bounceOnce {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.2);
+          }
+        }
+
+        @keyframes shake {
+          0%, 100% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(-5px);
+          }
+          75% {
+            transform: translateX(5px);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        .animate-slideUp {
+          animation: slideUp 0.3s ease-out;
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.3s ease-out;
+        }
+
+        .animate-bounce-slow {
+          animation: bounceSlow 2s infinite;
+        }
+
+        .animate-bounce-once {
+          animation: bounceOnce 0.5s ease-out;
+        }
+
+        .animate-shake {
+          animation: shake 0.5s ease-out;
+        }
+      `}</style>
     </>
   )
 }
+
 export default Navbar

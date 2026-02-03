@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 import wholesale from '../assets/wholesale.png'
 
-const API_URL = 'https://api.bluesip.org.in/api'
+const API_URL = 'http://localhost:5000/api'
 
 const BOTTLES_PER_BOX = 12
 const MINIMUM_BOXES = 30
@@ -266,12 +266,13 @@ const Products = () => {
                     )}
 
                     <div className="flex flex-row space-x-1.5 sm:space-x-2 mt-auto">
-                      <Link
-                        to={`/product/${product._id}`}
-                        className="flex-1 text-center py-1 sm:py-1.5 md:py-2 px-1.5 sm:px-2 md:px-3 border border-blue-sip-600 text-blue-sip-600 rounded-md hover:bg-blue-sip-50 transition-colors text-xs sm:text-sm font-medium"
-                      >
-                        View
-                      </Link>
+                     <Link
+  to={`/product/${product._id}`}
+  className="flex-1 text-center py-1 sm:py-1.5 md:py-2 px-1.5 sm:px-2 md:px-3 border border-blue-sip-600 text-blue-sip-600 rounded-md hover:bg-blue-sip-50 transition-colors text-xs sm:text-sm font-medium"
+>
+  View
+</Link>
+
 
                       <button
                         onClick={() => handleAddToCart(product)}

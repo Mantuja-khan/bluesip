@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Clock, Send, MessageCircle, Globe, Headphones, Awa
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-const API_URL = 'https://api.bluesip.org.in/api'
+const API_URL = 'http://localhost:5000/api'
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -83,32 +83,31 @@ const ContactUs = () => {
     }
   ]
 
-  const faqs = [
-    {
-      question: "How long do Blue Sip bottles keep drinks cold?",
-      answer: "Our advanced double-wall vacuum insulation technology keeps drinks cold for up to 24 hours and hot for up to 12 hours. The premium 18/8 stainless steel construction ensures optimal temperature retention for all-day hydration."
-    },
-    {
-      question: "Are Blue Sip bottles completely leak-proof?",
-      answer: "Yes! Our bottles feature precision-engineered sealing technology with food-grade silicone gaskets that provide 100% leak-proof performance. You can confidently carry them in bags, backpacks, or gym equipment without worry."
-    },
-    {
-      question: "What makes Blue Sip bottles eco-friendly?",
-      answer: "Our bottles are made from sustainable, BPA-free stainless steel that's designed to last for years, reducing single-use plastic waste. Each Blue Sip bottle can replace thousands of plastic bottles over its lifetime."
-    },
-    {
-      question: "How do I clean and maintain my Blue Sip bottle?",
-      answer: "Hand wash with warm soapy water and a bottle brush for best results. For deep cleaning, use baking soda and warm water. Avoid dishwasher, freezer, and microwave. The durable construction is designed for daily use and easy maintenance."
-    },
-    {
-      question: "Do you offer bulk pricing for corporate orders?",
-      answer: "Yes! We offer special wholesale pricing for bulk orders (minimum 10 pieces) and corporate gifting. Contact our business team at business@bluesip.com for custom quotes, branding options, and volume discounts."
-    },
-    {
-      question: "What's included with the 2-year warranty?",
-      answer: "Our comprehensive 2-year warranty covers manufacturing defects, insulation performance, and leak-proof functionality. We stand behind our quality and will replace or repair any defective bottles within the warranty period."
-    }
-  ]
+ const faqs = [
+  {
+    question: "How long does Blue Sip keep beverages hot or cold?",
+    answer: "Blue Sip bottles use advanced double-wall vacuum insulation to keep drinks cold for up to 24 hours and hot for up to 12 hours. This ensures freshness, temperature stability, and clarity in every drop — all day long."
+  },
+  {
+    question: "Are Blue Sip bottles 100% leak-proof?",
+    answer: "Yes! Blue Sip bottles are designed with precision-sealed, food-grade silicone lids that provide complete leak-proof protection. You can safely carry them in backpacks, gym bags, or travel luggage without spills."
+  },
+
+  {
+    question: "How do I clean my Blue Sip bottle properly?",
+    answer: "For best performance, hand wash your Blue Sip bottle using warm water and mild detergent. Use a bottle brush for deep cleaning. Avoid microwave and dishwasher use to preserve insulation and long-term durability."
+  },
+  {
+    question: "Is Blue Sip an eco-friendly brand?",
+    answer: "Absolutely. Blue Sip is committed to sustainability. Our reusable bottles help reduce single-use plastic waste and support a greener planet. One Blue Sip bottle can replace thousands of disposable plastic bottles."
+  },
+{
+  question: "Does Blue Sip provide warranty coverage?",
+  answer: "Yes. Blue Sip provides a 2-day warranty from the delivery date covering manufacturing defects and sealing issues. Any claims must be reported within 48 hours of delivery."
+}
+
+]
+
 
   const supportChannels = [
     {
@@ -307,25 +306,7 @@ const ContactUs = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-100">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-                  Why Choose Blue Sip?
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <Thermometer className="h-5 w-5 text-blue-sip-600" />
-                    <span className="text-sm text-gray-700">24-hour cold retention technology</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Shield className="h-5 w-5 text-green-600" />
-                    <span className="text-sm text-gray-700">100% leak-proof guarantee</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Award className="h-5 w-5 text-purple-600" />
-                    <span className="text-sm text-gray-700">2-year comprehensive warranty</span>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -363,41 +344,7 @@ const ContactUs = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-sip-600 via-blue-sip-700 to-purple-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div className="absolute inset-0">
-          <div className="absolute top-4 left-4 w-16 h-16 bg-white opacity-10 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-8 right-8 w-20 h-20 bg-white opacity-5 rounded-full animate-bounce"></div>
-          <div className="absolute top-1/2 left-1/3 w-12 h-12 bg-white opacity-10 rounded-full animate-ping"></div>
-        </div>
-        <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <div className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-2 bg-white/20 backdrop-blur-sm rounded-full text-xs sm:text-sm font-medium text-white mb-4 sm:mb-6">
-            <Headphones className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-            24/7 Hydration Support
-          </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
-            Need Immediate Help?
-          </h2>
-          <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-blue-sip-100 mb-6 sm:mb-8 leading-relaxed">
-            Our hydration experts are here to help you choose the perfect water bottle 
-            and answer any questions about staying properly hydrated.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <a
-              href="mailto:support@bluesip.com"
-              className="bg-white text-blue-sip-600 hover:bg-gray-100 font-semibold py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Email Support
-            </a>
-            <a
-              href="tel:+919876543210"
-              className="bg-blue-sip-800 text-white hover:bg-blue-sip-900 font-semibold py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 text-sm sm:text-base lg:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Call Now
-            </a>
-          </div>
-        </div>
-      </section>
+    
     </div>
   )
 }

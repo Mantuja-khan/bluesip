@@ -14,16 +14,19 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import TermsConditions from "./pages/TermsConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy"
 import VerifyOTP from './pages/VerifyOTP'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
 import Orders from './pages/Orders'
 import AboutUs from './pages/AboutUs'
-import Destributors from './pages/Destributors'
+// import Destributors from './pages/Destributors' // Commented out per request
+import CustomBottle from './pages/CustomBottle' // New Customization Page
 import ContactUs from './pages/ContactUs'
 import ProtectedRoute from './components/ProtectedRoute'
-// import StickerEditorModal from './components/StickerEditorModal'
+import StickerEditorModal from './components/StickerEditorModal'
 // import StickerButton from './components/StickerButton'
 
 function App() {
@@ -36,9 +39,6 @@ function App() {
           <div className="min-h-screen bg-gray-50">
             <Navbar />
             
-            {/* Sticker Design Button - Only shows on home page */}
-            {/* <StickerButton onClick={() => setOpenStickerEditor(true)} /> */}
-
             <main className="min-h-screen">
               <Routes>
                 {/* Public Routes */}
@@ -48,7 +48,10 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/contact" element={<ContactUs />} />
-                <Route path="/destributors" element={<Destributors />} />
+                
+                {/* Replaced Distributors with Custom Bottle Page */}
+                {/* <Route path="/destributors" element={<Destributors />} /> */}
+                <Route path="/customize" element={<CustomBottle />} /> 
                 
                 {/* Auth Routes */}
                 <Route path="/login" element={<Login />} />
@@ -56,6 +59,8 @@ function App() {
                 <Route path="/verify-otp" element={<VerifyOTP />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/terms-condition" element={<TermsConditions />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
                 {/* Protected Routes */}
                 <Route
@@ -83,29 +88,19 @@ function App() {
                   }
                 />
 
-                {/* 404 - Catch all route */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>
 
             <Footer />
 
-            Sticker Editor Modal
             {openStickerEditor && (
               <StickerEditorModal onClose={() => setOpenStickerEditor(false)} />
             )}
 
-            {/* Toast Notifications */}
             <ToastContainer
               position="top-right"
               autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
               theme="light"
             />
           </div>

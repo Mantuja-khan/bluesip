@@ -14,7 +14,7 @@ import {
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-const API_URL = 'https://api.bluesip.org.in/api'
+const API_URL = 'http://localhost:5000/api'
 
 const Users = () => {
   const [users, setUsers] = useState([])

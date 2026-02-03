@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Phone, Store, User } from 'lucide-react';
 import distributor from "../assets/des.png";
-
 const BOTTLES_PER_BOX = 12;
 const MINIMUM_BOXES = 30;
 const MINIMUM_BOTTLES = MINIMUM_BOXES * BOTTLES_PER_BOX; // 360 bottles
@@ -83,7 +82,7 @@ export default function DistributorsPage() {
             🏪 Find our distributors near you for fast and reliable delivery
           </span>
           <span className="text-sm font-medium px-4">
-            🏪 Find our distributors near you for fast and reliable delivery
+            🏪 Find our distributors near you for fast and reliable delivery 
           </span>
           <span className="text-sm font-medium px-4">
             🏪 Find our distributors near you for fast and reliable delivery

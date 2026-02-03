@@ -14,8 +14,7 @@ import {
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-const API_URL = 'https://api.bluesip.org.in/api'
-
+const API_URL = 'http://localhost:5000/api'
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)

@@ -3,7 +3,7 @@ import { Package, Calendar, DollarSign, Truck, CheckCircle, XCircle, Clock, X, M
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
-const API_URL = 'https://api.bluesip.org.in/api'
+const API_URL = 'http://localhost:5000/api'
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
@@ -58,18 +58,23 @@ const Orders = () => {
         }
       )
 
-      toast.success(response.data.message || 'Order cancelled successfully')
+      toast.success(response.data.message || 'Order cancelled successfully.')
       
       // Update orders list
       setOrders(orders.map(order => 
         order._id === orderId 
-          ? { ...order, status: 'cancelled', cancelledAt: new Date() }
+          ? { ...order, status: 'cancelled', cancelledAt: new Date(), cancelReason: cancelReason || 'Cancelled by user' }
           : order
       ))
 
       // Update selected order if modal is open
       if (selectedOrder && selectedOrder._id === orderId) {
-        setSelectedOrder({ ...selectedOrder, status: 'cancelled', cancelledAt: new Date() })
+        setSelectedOrder({ 
+          ...selectedOrder, 
+          status: 'cancelled', 
+          cancelledAt: new Date(),
+          cancelReason: cancelReason || 'Cancelled by user'
+        })
       }
       
       setCancelReason('')

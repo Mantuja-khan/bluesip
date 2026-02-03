@@ -20,9 +20,6 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import User from './models/User.js'
 
 dotenv.config()
-
-
-
 const app = express()
 const PORT = process.env.PORT || 5000
 
